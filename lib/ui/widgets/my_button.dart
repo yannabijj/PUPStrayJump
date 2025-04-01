@@ -6,11 +6,17 @@ import 'package:new_super_jumper/ui/widgets/my_text.dart';
 class MyButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final double fontSize;
+  final double height;
+  final double width;
 
   const MyButton(
     this.text, {
     super.key,
     required this.onPressed,
+    this.fontSize = 20, // Default font size
+    this.height = 45, // Default height
+    this.width = 130, // Default width
   });
 
   @override
@@ -19,11 +25,11 @@ class MyButton extends StatelessWidget {
       sprite: Future.value(Assets.button),
       pressedSprite: Future.value(Assets.button),
       onPressed: onPressed,
-      height: 50,
-      width: 120,
+      height: height,
+      width: width,
       label: MyText(
         text,
-        fontSize: 26,
+        fontSize: fontSize, // Apply custom font size
       ),
     );
   }

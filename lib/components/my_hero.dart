@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +13,7 @@ import 'package:new_super_jumper/components/platform.dart';
 import 'package:new_super_jumper/components/power_up.dart';
 import 'package:new_super_jumper/utils.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum HeroState {
   jump,
@@ -56,23 +56,62 @@ class MyHero extends BodyComponent<MyGame>
     renderBody = false;
 
     if (isMobile || isWeb) {
+      double previousAcceleration = 0.5;
+      const double smoothingFactor = 0.7; // Adjusted for smoother response
+      const double deadzone = 0.05; // Ignore small movements
+      const double maxAcceleration = 0.8; // Limit max acceleration
+
       accelerometerSubscription = accelerometerEventStream().listen((event) {
-        accelerationX = (event.x * -1).clamp(-1, 1);
+        double newAcceleration =
+            (event.x * -1).clamp(-maxAcceleration, maxAcceleration);
+
+        // Ignore minor movements (deadzone)
+        if (newAcceleration.abs() < deadzone) {
+          newAcceleration = 0;
+        }
+
+        // Apply smoother transition
+        accelerationX = (previousAcceleration * (1 - smoothingFactor)) +
+            (newAcceleration * smoothingFactor);
+
+        previousAcceleration = accelerationX;
       });
     }
 
-    fallComponent = SpriteComponent(
-      sprite: Assets.heroFall,
-      size: size,
-      anchor: Anchor.center,
-    );
+    await _loadCharacterSkin(); // Load character skin
+  }
 
-    jumpComponent = SpriteComponent(
-      sprite: Assets.heroJump,
-      size: size,
-      anchor: Anchor.center,
-    );
+  Future<void> _loadCharacterSkin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String equippedCharacter = prefs.getString("equipped_character") ?? "Loki";
 
+    Sprite fallSprite;
+    Sprite jumpSprite;
+
+    if (equippedCharacter == "Loki") {
+      fallSprite = Assets.lokiFall;
+      jumpSprite = Assets.lokiJump;
+    } else if (equippedCharacter == "Mila") {
+      fallSprite = Assets.milaFall;
+      jumpSprite = Assets.milaJump;
+    } else if (equippedCharacter == "Milo") {
+      fallSprite = Assets.miloFall;
+      jumpSprite = Assets.miloJump;
+    } else if (equippedCharacter == "Po") {
+      fallSprite = Assets.poFall;
+      jumpSprite = Assets.poJump;
+    } else if (equippedCharacter == "Toffee") {
+      fallSprite = Assets.toffeeFall;
+      jumpSprite = Assets.toffeeJump;
+    } else {
+      fallSprite = Assets.lokiFall;
+      jumpSprite = Assets.lokiJump;
+    }
+
+    fallComponent =
+        SpriteComponent(sprite: fallSprite, size: size, anchor: Anchor.center);
+    jumpComponent =
+        SpriteComponent(sprite: jumpSprite, size: size, anchor: Anchor.center);
     currentComponent = fallComponent;
     add(currentComponent);
   }

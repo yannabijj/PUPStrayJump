@@ -29,9 +29,9 @@ class GameOverMenu extends StatelessWidget {
                 const MyText(
                   'Game Over!',
                   fontSize: 56,
+                  color: Color.fromARGB(255, 245, 192, 20),
                 ),
                 Table(
-                  // border: TableBorder.all(),
                   columnWidths: const {
                     0: FlexColumnWidth(.2),
                     1: FlexColumnWidth(.5),
@@ -42,19 +42,22 @@ class GameOverMenu extends StatelessWidget {
                     TableRow(
                       children: [
                         const SizedBox(),
-                        const MyText('Score'),
-                        MyText(game.score.toString()),
+                        const MyText('Score',
+                            color: Color.fromARGB(255, 245, 192, 20)),
+                        MyText(game.score.toString(), color: Colors.yellow),
                         const SizedBox(),
                       ],
                     ),
                     TableRow(
                       children: [
                         const SizedBox(),
-                        const MyText('Best Score'),
-                        MyText('${HighScores.highScores[0]}'),
+                        const MyText('Best Score',
+                            color: Color.fromARGB(255, 245, 192, 20)),
+                        MyText('${HighScores.highScores[0]}',
+                            color: Colors.yellow),
                         const SizedBox(),
                       ],
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: 40),

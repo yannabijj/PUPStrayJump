@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class MyText extends StatelessWidget {
   final String text;
   final double? fontSize;
+  final Color? color; // Added color parameter
 
   const MyText(
     this.text, {
     super.key,
-    this.fontSize = 28,
+    this.fontSize = 20,
+    this.color = const Color.fromARGB(255, 129, 57, 9), // Default color
   });
 
   @override
@@ -16,7 +18,7 @@ class MyText extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: fontSize,
-        color: Colors.black,
+        color: color, // Now supports custom colors
         fontWeight: FontWeight.w800,
         fontFamily: 'DaveysDoodleface',
       ),

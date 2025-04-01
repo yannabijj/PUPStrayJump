@@ -1,22 +1,37 @@
+import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
 
 class Assets {
+  // UI Buttons
   static late final Sprite button;
   static late final Sprite buttonPause;
   static late final Sprite buttonBack;
 
+  // Background
   static late final Sprite background;
 
-  static late final Sprite heroFall;
-  static late final Sprite heroJump;
+  // Characters
+  static late final Sprite lokiFall;
+  static late final Sprite lokiJump;
+  static late final Sprite milaFall;
+  static late final Sprite milaJump;
+  static late final Sprite miloFall;
+  static late final Sprite miloJump;
+  static late final Sprite poFall;
+  static late final Sprite poJump;
+  static late final Sprite toffeeFall;
+  static late final Sprite toffeeJump;
 
+  static late final Sprite blackProfile;
+
+  // Enemies
   static late final Sprite cloudHappyEnemy;
   static late final Sprite cloudAngryEnemy;
   static late final SpriteAnimation hearthEnemy;
-  static late final SpriteAnimation jetpackFire;
   static late final SpriteAnimation lightning;
 
+  // Power-ups and Items
   static late final Sprite coin;
   static late final Sprite gun;
   static late final Sprite bullet;
@@ -25,7 +40,9 @@ class Assets {
   static late final Sprite jetpackSmall;
   static late final Sprite bubble;
   static late final Sprite jetpack;
+  static late final SpriteAnimation jetpackFire;
 
+  // Platforms
   static late final Sprite platformBeige;
   static late final Sprite platformBeigeLight;
   static late final Sprite platformBeigeBroken;
@@ -58,32 +75,44 @@ class Assets {
   static late final Sprite platformPinkRight;
 
   static Future<void> load() async {
+    // Load additional hero sprites
+    lokiFall = await _loadSprite('loki_fall.png');
+    lokiJump = await _loadSprite('loki_jump.png');
+    milaFall = await _loadSprite('mila_fall.png');
+    milaJump = await _loadSprite('mila_jump.png');
+    miloFall = await _loadSprite('milo_fall.png');
+    miloJump = await _loadSprite('milo_jump.png');
+    poFall = await _loadSprite('po_fall.png');
+    poJump = await _loadSprite('po_jump.png');
+    toffeeFall = await _loadSprite('toffee_fall.png');
+    toffeeJump = await _loadSprite('toffee_jump.png');
+
+    blackProfile = await _loadSprite('blackProfile.png');
+
+    background = await _loadSprite('background.png');
+
+    // Load Texture Atlas
     final atlas = await TexturePackerAtlas.load('atlasMap.atlas');
+
+    // UI and Background
     button = atlas.findSpriteByName('button')!;
     buttonPause = atlas.findSpriteByName('buttonPause')!;
     buttonBack = atlas.findSpriteByName('buttonBack')!;
-    background = atlas.findSpriteByName('background')!;
 
-    heroFall = atlas.findSpriteByName('heroFall')!;
-    heroJump = atlas.findSpriteByName('heroJump')!;
-
+    // Enemies
     cloudHappyEnemy = atlas.findSpriteByName('HappyCloud')!;
     cloudAngryEnemy = atlas.findSpriteByName('AngryCloud')!;
     final enemy1 = atlas.findSpriteByName('HearthEnemy1')!;
     final enemy2 = atlas.findSpriteByName('HearthEnemy2')!;
+    hearthEnemy =
+        SpriteAnimation.spriteList([enemy1, enemy2], stepTime: 0.2, loop: true);
+
     final lightning1 = atlas.findSpriteByName('Lightning1')!;
     final lightning2 = atlas.findSpriteByName('Lightning2')!;
+    lightning = SpriteAnimation.spriteList([lightning1, lightning2],
+        stepTime: 0.15, loop: true);
 
-    hearthEnemy = SpriteAnimation.spriteList([
-      enemy1,
-      enemy2,
-    ], stepTime: 0.2, loop: true);
-
-    lightning = SpriteAnimation.spriteList([
-      lightning1,
-      lightning2,
-    ], stepTime: 0.15, loop: true);
-
+    // Power-ups and Items
     coin = atlas.findSpriteByName('Coin')!;
     gun = atlas.findSpriteByName('Pistol')!;
     bullet = atlas.findSpriteByName('Bullet')!;
@@ -95,12 +124,10 @@ class Assets {
 
     final jetpack1 = atlas.findSpriteByName('JetFire1')!;
     final jetpack2 = atlas.findSpriteByName('JetFire2')!;
+    jetpackFire = SpriteAnimation.spriteList([jetpack1, jetpack2],
+        stepTime: 0.15, loop: true);
 
-    jetpackFire = SpriteAnimation.spriteList([
-      jetpack1,
-      jetpack2,
-    ], stepTime: 0.15, loop: true);
-
+    // Platforms
     platformBeige = atlas.findSpriteByName('LandPiece_DarkBeige')!;
     platformBeigeLight = atlas.findSpriteByName('LandPiece_LightBeige')!;
     platformBeigeBroken = atlas.findSpriteByName('BrokenLandPiece_Beige')!;
@@ -140,5 +167,9 @@ class Assets {
     platformPinkBroken = atlas.findSpriteByName('BrokenLandPiece_Pink')!;
     platformPinkLeft = atlas.findSpriteByName('HalfLandPiece_Left_Pink')!;
     platformPinkRight = atlas.findSpriteByName('HalfLandPiece_Right_Pink')!;
+  }
+
+  static Future<Sprite> _loadSprite(String fileName) async {
+    return Sprite(await Flame.images.load(fileName));
   }
 }

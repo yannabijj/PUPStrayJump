@@ -7,7 +7,7 @@ import 'package:new_super_jumper/utils.dart';
 
 final textPaint = TextPaint(
   style: const TextStyle(
-    color: Colors.black,
+    color: Color.fromARGB(255, 90, 25, 5),
     fontSize: 35,
     fontWeight: FontWeight.w800,
     fontFamily: 'DaveysDoodleface',
